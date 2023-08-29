@@ -26,27 +26,18 @@ class MQLProspects(Base):
     group = Column(String(255))
     page = Column(String(255))
     duration = Column(DateTime)
-    source = Column(String(255))
-    timestamp = Column(DateTime(timezone=True), server_default=func.now())
-    company = relationship('Company', back_populates='mql_prospects')
-    session_data = relationship('SessionData', back_populates='mql_prospects')
-    company_id = Column(Integer, ForeignKey('company.id'))
-
-    __table_args__ = (
-        UniqueConstraint('first_name', 'last_name', 'company_id',  name='_customer_location_uc'),
-    )
-
-
-class Company(Base):
-    __tablename__ = 'company'
-
-    id = Column(Integer, primary_key=True, autoincrement=True)
     company_name = Column(String(255))
     website = Column(String(255))
     company_headcount = Column(String(255))
     location = Column(String(255))
     industry = Column(String(255))
-    mql_prospects = relationship('MQLProspects', back_populates='session_data')
+    source = Column(String(255))
+    timestamp = Column(DateTime(timezone=True), server_default=func.now())
+    session_data = relationship('SessionData', back_populates='mql_prospects')
+
+    __table_args__ = (
+        UniqueConstraint('first_name', 'last_name', 'company_name',  name='_customer_location_uc'),
+    )
 
 
 class SessionData(Base):
