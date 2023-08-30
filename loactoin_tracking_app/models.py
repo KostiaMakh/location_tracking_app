@@ -1,5 +1,4 @@
 from sqlalchemy.orm import relationship
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql import func
 from sqlalchemy import (
     Column,
@@ -7,11 +6,9 @@ from sqlalchemy import (
     Integer,
     DateTime,
     ForeignKey,
-    UniqueConstraint,
 )
 
-
-Base = declarative_base()
+from loactoin_tracking_app.database import Base
 
 
 class MQLProspects(Base):
@@ -20,9 +17,10 @@ class MQLProspects(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     first_name = Column(String(255))
     last_name = Column(String(255))
-    email = Column(String(255), unique=True)
+    email = Column(String(255))
     title = Column(String(255))
     linkedin_url = Column(String(255))
+    phone_number = Column(String(255))
     group = Column(String(255))
     page = Column(String(255))
     duration = Column(DateTime)
@@ -35,9 +33,30 @@ class MQLProspects(Base):
     timestamp = Column(DateTime(timezone=True), server_default=func.now())
     session_data = relationship('SessionData', back_populates='mql_prospects')
 
-    __table_args__ = (
-        UniqueConstraint('first_name', 'last_name', 'company_name',  name='_customer_location_uc'),
-    )
+    # __table_args__ = (
+    #     UniqueConstraint('first_name', 'last_name', 'company_name',  name='_customer_location_uc'),
+    # )
+
+
+class Contact(Base):
+    __tablename__ = 'contact'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    first_name = Column(String(255))
+    last_name = Column(String(255))
+    email = Column(String(255))
+    title = Column(String(255))
+    linkedin_url = Column(String(255))
+    phone_number = Column(String(255))
+    company_name = Column(String(255))
+    website = Column(String(255))
+    company_headcount = Column(String(255))
+    location = Column(String(255))
+    industry = Column(String(255))
+
+    # __table_args__ = (
+    #     UniqueConstraint('first_name', 'last_name', 'company_name',  name='_fn_ln_cm'),
+    # )
 
 
 class SessionData(Base):
